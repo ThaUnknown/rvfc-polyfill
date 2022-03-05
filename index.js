@@ -2,16 +2,16 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
   HTMLVideoElement.prototype._rvfcpolyfillmap = {}
   HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
     const quality = this.getVideoPlaybackQuality()
-    const baseline = quality.totalVideoFrames - quality.droppedVideoFrames
+    const baseline = this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
 
     const check = () => {
       const newquality = this.getVideoPlaybackQuality()
-      const current = newquality.totalVideoFrames - newquality.droppedVideoFrames
+      const current = this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
       if (current > baseline) {
         const now = performance.now()
         callback(now, {
           presentationTime: now,
-          expectedDisplayTime: now + (this.mozFrameDelay || 0),
+          expectedDisplayTime: now + (this.mozFrameDelay / 1000 || 0),
           width: this.videoWidth,
           height: this.videoHeight,
           mediaTime: this.currentTime,
