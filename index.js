@@ -2,31 +2,33 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
   HTMLVideoElement.prototype._rvfcpolyfillmap = {}
   HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
     const quality = this.getVideoPlaybackQuality()
-    const baseline = this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
+    const baseline = this.mozPresentedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
 
-    const check = () => {
+    const check = (old, now) => {
       const newquality = this.getVideoPlaybackQuality()
-      const current = this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
-      if (current > baseline) {
-        const now = performance.now()
+      const presentedFrames = this.mozPresentedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
+      if (presentedFrames > baseline) {
+        const processingDuration = this.mozFrameDelay || (newquality.totalFrameDelay - quality.totalFrameDelay) || 0
+        const timediff = now - old // HighRes diff
         callback(now, {
-          presentationTime: now,
-          expectedDisplayTime: now + (this.mozFrameDelay / 1000 || 0),
+          presentationTime: now + processingDuration * 1000,
+          expectedDisplayTime: now + timediff,
           width: this.videoWidth,
           height: this.videoHeight,
-          mediaTime: this.currentTime,
-          presentedFrames: current,
-          processingDuration: this.mozFrameDelay || (newquality.totalFrameDelay - quality.totalFrameDelay) || 0
+          mediaTime: Math.max(0, this.currentTime - processingDuration),
+          presentedFrames,
+          processingDuration
         })
         delete this._rvfcpolyfillmap[handle]
       } else {
-        this._rvfcpolyfillmap[handle] = requestAnimationFrame(check)
+        this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(now, newer))
       }
     }
 
     const handle = Date.now()
-    this._rvfcpolyfillmap[handle] = requestAnimationFrame(check)
-    return handle
+    const now = performance.now()
+    this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(now, newer))
+    return handle // spec says long, not doube, so can't re-use performance.now
   }
 
   HTMLVideoElement.prototype.cancelVideoFrameCallback = function (handle) {

@@ -1,14 +1,23 @@
 {
   "name": "rvfc-polyfill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "requestVideoFrameCallback polyfill",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "ThaUnknownmiru",
+  "license": "GPT-3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThaUnknown/rvfc-polyfill.git"
   },
-  "standard": {
-    "env": "browser"
+  "keywords": [
+    "rvfc-polyfill",
+    "requestVideoFrameCallback",
+    "video",
+    "polyfill",
+    "animationFrame"
+  ],
+  "bugs": {
+    "url": "https://github.com/ThaUnknown/rvfc-polyfill/issues"
   },
-  "author": "ThaUnknown_",
-  "license": "GPT-3"
+  "homepage": "https://github.com/ThaUnknown/rvfc-polyfill#readme"
 }
