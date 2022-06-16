@@ -15,7 +15,7 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
           expectedDisplayTime: now + timediff,
           width: this.videoWidth,
           height: this.videoHeight,
-          mediaTime: Math.max(0, this.currentTime - processingDuration),
+          mediaTime: Math.max(0, this.currentTime || 0) + timediff,
           presentedFrames,
           processingDuration
         })
