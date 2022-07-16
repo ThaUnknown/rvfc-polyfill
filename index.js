@@ -2,11 +2,11 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
   HTMLVideoElement.prototype._rvfcpolyfillmap = {}
   HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
     const quality = this.getVideoPlaybackQuality()
-    const baseline = this.mozPresentedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
+    const baseline = this.mozPresentedFrames || this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
 
     const check = (old, now) => {
       const newquality = this.getVideoPlaybackQuality()
-      const presentedFrames = this.mozPresentedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
+      const presentedFrames = this.mozPresentedFrames || this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
       if (presentedFrames > baseline) {
         const processingDuration = this.mozFrameDelay || (newquality.totalFrameDelay - quality.totalFrameDelay) || 0
         const timediff = now - old // HighRes diff
