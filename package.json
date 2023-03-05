@@ -4,7 +4,7 @@
   "description": "requestVideoFrameCallback polyfill",
   "main": "index.js",
   "author": "ThaUnknownmiru",
-  "license": "GPT-3",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ThaUnknown/rvfc-polyfill.git"
