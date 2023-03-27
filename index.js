@@ -19,16 +19,15 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
           presentedFrames,
           processingDuration
         })
-        delete this._rvfcpolyfillmap[handle]
+        delete this._rvfcpolyfillmap[now]
       } else {
-        this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(now, newer))
+        this._rvfcpolyfillmap[now] = requestAnimationFrame(newer => check(now, newer))
       }
     }
 
-    const handle = Date.now()
     const now = performance.now()
-    this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(now, newer))
-    return handle // spec says long, not doube, so can't re-use performance.now
+    this._rvfcpolyfillmap[now] = requestAnimationFrame(newer => check(now, newer))
+    return now
   }
 
   HTMLVideoElement.prototype.cancelVideoFrameCallback = function (handle) {
