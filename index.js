@@ -1,6 +1,7 @@
 if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPlaybackQuality' in HTMLVideoElement.prototype) {
   HTMLVideoElement.prototype._rvfcpolyfillmap = {}
   HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
+    const handle = performance.now()
     const quality = this.getVideoPlaybackQuality()
     const baseline = this.mozPresentedFrames || this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
 
@@ -19,15 +20,13 @@ if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPla
           presentedFrames,
           processingDuration
         })
-        delete this._rvfcpolyfillmap[now]
+        delete this._rvfcpolyfillmap[handle]
       } else {
-        this._rvfcpolyfillmap[now] = requestAnimationFrame(newer => check(now, newer))
+        this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(now, newer))
       }
     }
-
-    const now = performance.now()
-    this._rvfcpolyfillmap[now] = requestAnimationFrame(newer => check(now, newer))
-    return now
+    this._rvfcpolyfillmap[handle] = requestAnimationFrame(newer => check(handle, newer))
+    return handle
   }
 
   HTMLVideoElement.prototype.cancelVideoFrameCallback = function (handle) {
