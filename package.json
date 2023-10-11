@@ -1,9 +1,9 @@
 {
   "name": "rvfc-polyfill",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "requestVideoFrameCallback polyfill",
   "main": "index.js",
-  "author": "ThaUnknownmiru",
+  "author": "ThaUnknown",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",

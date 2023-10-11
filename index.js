@@ -1,4 +1,4 @@
-if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPlaybackQuality' in HTMLVideoElement.prototype) {
+if (typeof HTMLVideoElement !== 'undefined' && !('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPlaybackQuality' in HTMLVideoElement.prototype) {
   HTMLVideoElement.prototype._rvfcpolyfillmap = {}
   HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
     const handle = performance.now()
