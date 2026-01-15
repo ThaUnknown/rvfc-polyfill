@@ -1,6 +1,6 @@
 {
   "name": "rvfc-polyfill",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "requestVideoFrameCallback polyfill",
   "main": "index.js",
   "author": "ThaUnknown",
